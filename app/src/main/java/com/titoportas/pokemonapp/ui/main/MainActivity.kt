@@ -1,4 +1,4 @@
-package com.titoportas.pokemonapp
+package com.titoportas.pokemonapp.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,9 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.titoportas.pokemonapp.ui.theme.PokemonAppTheme
+import com.titoportas.pokemonapp.viewmodel.PokemonViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +27,22 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+//                    Greeting("Android")
+                    ApiComposable()
                 }
             }
         }
     }
 }
 
+@Composable
+private fun ApiComposable(viewModel: PokemonViewModel = viewModel()) {
+    val status by viewModel.status.observeAsState("Algo")
+    Text(text = status)
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getPokemonList()
+    }
+}
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
